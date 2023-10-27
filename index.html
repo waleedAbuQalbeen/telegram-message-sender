@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <title>Telegram Message Sender</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+    <h1>Telegram Message Sender</h1>
+    <textarea id="message" placeholder="Enter your message"></textarea>
+    <button id="sendButton">Send Message</button>
+    <script>
+        document.getElementById('sendButton').addEventListener('click', function() {
+            var message = document.getElementById('message').value;
+            if (message.trim() === '') {
+                alert('Please enter a message.');
+            } else {
+                var token = '6111399770:AAHIedwU76qcgFutCEj6GBvtGO9tjL_xkYE'; // Replace with your actual bot token
+                var channels = ['-1002023845309', '-1002121799815']; // Your channel IDs
+    
+                // Send the message to each channel in parallel
+                channels.forEach(function(channel_id) {
+                    var xhr = new XMLHttpRequest();
+                    var url = 'https://api.telegram.org/bot' + token + '/sendMessage';
+                    var data = new FormData();
+                    data.append('chat_id', channel_id);
+                    data.append('text', message);
+    
+                    xhr.open('POST', url, true);
+                    xhr.send(data);
+    
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            alert('Message sent successfully to channel ' + channel_id);
+                        } else {
+                            alert('Failed to send the message to channel ' + channel_id + '. Check the console for details.');
+                            console.log(xhr.responseText);
+                        }
+                    };
+                });
+            }
+        });
+    </script>
+    
+</body>
+</html>
